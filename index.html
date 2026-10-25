@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>QiumingDLL · 元游戏开发辅助套件</title>
+<meta name="description" content="QiumingDLL 是面向 GameMaker、Unity、Godot 等任意引擎的 Windows 扩展：窗口分裂、内嵌浏览器、输入法内联、麦克风音量与音高、进程检测、JSON5。免费用于商业与非商业作品。">
+<meta name="theme-color" content="#08090d">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QiumingDLL · 元游戏开发辅助套件">
+<meta property="og:description" content="一个 DLL，把窗口分裂、内嵌浏览器、输入法、麦克风感知与进程检测交给 GameMaker、Unity、Godot。">
+<meta property="og:url" content="https://qiumingdll.genouka.top/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b0d13'/%3E%3Cpath d='M22 10.5v8.2a4.3 4.3 0 0 1-4.3 4.3h-3.4' fill='none' stroke='%2364e0d0' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='22' cy='10' r='2.6' fill='%23a78bfa'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="backdrop" aria-hidden="true">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="orb orb-c"></div>
+  <div class="grid-lines"></div>
+  <div class="grain"></div>
+</div>
+
+<a class="skip" href="#main">跳到主要内容</a>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="QiumingDLL 首页">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-opacity=".35"/>
+      <path d="M22 10.5v8.2a4.3 4.3 0 0 1-4.3 4.3h-3.4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+      <circle cx="22" cy="10" r="2.4" fill="currentColor"/>
+    </svg>
+    <span class="brand-text">
+      <strong>QiumingDLL</strong>
+      <em>元游戏开发辅助套件</em>
+    </span>
+  </a>
+  <nav class="nav-links" aria-label="站点导航">
+    <a href="#modules">功能模块</a>
+    <a href="#quickstart">快速上手</a>
+    <a href="#license">授权条款</a>
+    <a href="https://genouka.github.io/qiumingdll-docs/#/README" target="_blank" rel="noopener">文档<span class="ext" aria-hidden="true">↗</span></a>
+  </nav>
+  <a class="btn btn-primary btn-sm nav-cta" href="https://pan.quark.cn/s/0d6d1dbf3702" target="_blank" rel="noopener">下载</a>
+  <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navMenu" aria-label="展开导航">
+    <span></span><span></span>
+  </button>
+  <div class="nav-menu" id="navMenu" hidden>
+    <a href="#modules">功能模块</a>
+    <a href="#quickstart">快速上手</a>
+    <a href="#license">授权条款</a>
+    <a href="https://genouka.github.io/qiumingdll-docs/#/README" target="_blank" rel="noopener">文档 ↗</a>
+    <a href="https://pan.quark.cn/s/0d6d1dbf3702" target="_blank" rel="noopener">下载 ↗</a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <h1>Qiuming<span class="grad">DLL</span></h1>
+      <p class="tagline">元游戏开发辅助套件</p>
+      <p class="lede">
+        把窗口分裂、内嵌浏览器、输入法内联、麦克风音量与音高、进程检测这些
+        「打破第四面墙」的能力，压进一个 <code>qiumingdll.dll</code>。
+        GML 一行调用，Windows 之外自动降级，不会把游戏拖垮。
+      </p>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="https://pan.quark.cn/s/0d6d1dbf3702" target="_blank" rel="noopener">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0 4-4m-4 4L6 8M4 15.5h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          下载 QiumingDLL
+        </a>
+        <a class="btn btn-ghost btn-lg" href="https://genouka.github.io/qiumingdll-docs/#/README" target="_blank" rel="noopener">
+          阅读文档<span class="ext" aria-hidden="true">↗</span>
+        </a>
+      </div>
+      <ul class="chips" role="list">
+        <li>157 个 GML 函数</li>
+        <li>163 篇文档</li>
+        <li>x86 / x64</li>
+        <li>免费商用</li>
+      </ul>
+    </div>
+
+    <div class="hero-visual">
+      <div class="window-card" aria-hidden="true">
+        <div class="window-bar">
+          <span class="lights"><i></i><i></i><i></i></span>
+          <span class="window-title">obj_qiuming · Create</span>
+        </div>
+<pre class="code code-hero"><code><span class="c">// 1. 绑定全部外部函数（仅 Windows 生效）</span>
+<span class="f">qiumingdll_init</span>();
+
+<span class="c">// 2. 开一个分屏窗口，把主画面拆成两半</span>
+<span class="f">qiumingdll_winsplit_init</span>();
+<span class="k">var</span> right = <span class="f">qiumingdll_winsplit_create</span>(
+    <span class="n">0</span>, <span class="n">0</span>, cw <span class="k">div</span> <span class="n">2</span>, ch,
+    <span class="n">100</span>, <span class="n">100</span>, cw <span class="k">div</span> <span class="n">2</span>, ch
+);
+
+<span class="c">// 3. 弹入，缓动曲线 bounce-out</span>
+<span class="f">qiumingdll_winsplit_set_easing_curve</span>(right, <span class="n">10</span>);
+<span class="f">qiumingdll_winsplit_set_position_animate</span>(
+    right, <span class="n">40</span>, <span class="n">80</span>, <span class="n">600</span>, <span class="n">16</span>
+);</code></pre>
+      </div>
+      <div class="float-tag float-tag-a">DWM 缩略图 · 零 CPU</div>
+      <div class="float-tag float-tag-b">16 个分屏 / WebView</div>
+    </div>
+  </section>
+
+  <section class="stats" aria-label="概览数据">
+    <div class="stat"><span class="stat-num">9</span><span class="stat-label">功能模块</span></div>
+    <div class="stat"><span class="stat-num">157</span><span class="stat-label">GML 包装函数</span></div>
+    <div class="stat"><span class="stat-num">16</span><span class="stat-label">分屏 / WebView 上限</span></div>
+    <div class="stat"><span class="stat-num">0</span><span class="stat-label">运行时依赖（除系统库）</span></div>
+  </section>
+
+  <section class="section" id="modules">
+    <div class="section-head reveal">
+      <p class="kicker">Modules</p>
+      <h2>九块积木，一个 DLL</h2>
+      <p class="section-sub">原先分散的 <code>qiuming_aliveme</code>、<code>qiuming_fixflash</code>、<code>qiuming_specmessage</code>、<code>qiuming_spectitle</code> 已合并进同一个二进制，新增的能力也长在同一份代码里。</p>
+    </div>
+
+    <div class="cards">
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-winsplit" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="8" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="13" y="4" width="8" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.4 2.4"/><rect x="3" y="13" width="18" height="7" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="card-count">61</span>
+        </div>
+        <h3>窗口分裂</h3>
+        <p class="card-en">winsplit</p>
+        <p class="card-desc">把主窗口的任意区域实时映射到最多 16 个独立窗口：异形裁剪、批量动画、路径移动、DWM 缩略图零拷贝刷新。</p>
+        <p class="card-api">qiumingdll_winsplit_create(<span>…</span>)</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-webview" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M3 8.5h18" stroke="currentColor" stroke-width="1.6"/><circle cx="6.2" cy="6.2" r=".9" fill="currentColor"/><circle cx="9.2" cy="6.2" r=".9" fill="currentColor"/></svg>
+          </span>
+          <span class="card-count">37</span>
+        </div>
+        <h3>内嵌浏览器</h3>
+        <p class="card-en">webview</p>
+        <p class="card-desc">基于 WebView2，独立窗口或嵌进游戏窗口的子窗口；导航、执行 JavaScript、缩放、透明度、点击穿透区域全部可控。</p>
+        <p class="card-api">qiumingdll_webview_create_child(<span>…</span>)</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-ime" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M6 10h4M6 13.5h7M14.5 10h3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">23</span>
+        </div>
+        <h3>输入法控制</h3>
+        <p class="card-en">ime</p>
+        <p class="card-desc">内联候选窗跟随光标，组合文本、提交文本、候选列表可逐帧轮询；附开箱即用的 IME Input 组件与非 Windows 回退。</p>
+        <p class="card-api">qiumingdll_ime_set_inline_position(<span>…</span>)</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-volume" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 10v4M8 7v10M12 4v16M16 8v8M20 11v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">10</span>
+        </div>
+        <h3>麦克风音量</h3>
+        <p class="card-en">volume</p>
+        <p class="card-desc">RMS、峰值、dB 与 0–5 音量等级，带静音阈值与平滑系数。适合语音判定、音量条与「对着麦克风喊」的解谜。</p>
+        <p class="card-api">qiumingdll_volume_get_level()</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-pitch" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M3 15c2.5 0 2.5-6 5-6s2.5 9 5 9 2.5-10 5-10 2.5 4 3 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">8</span>
+        </div>
+        <h3>音高检测</h3>
+        <p class="card-en">pitch</p>
+        <p class="card-desc">YIN 算法实时基频识别，直接给出频率与 MIDI 音符编号。唱歌、调音、音游判定都能接。</p>
+        <p class="card-api">qiumingdll_pitch_get_note()</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-proc" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="m15.4 15.4 5.1 5.1" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">4</span>
+        </div>
+        <h3>进程检测</h3>
+        <p class="card-en">procdetect</p>
+        <p class="card-desc">识别 Cheat Engine 等调试工具、OBS 等直播录屏软件、游戏多开，或任意指定进程名。无需初始化。</p>
+        <p class="card-api">qiumingdll_procdetect_cheatengine()</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-json5" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 4c-2 0-2 2-2 3s0 3-2 3c2 0 2 2 2 3s0 3 2 3M16 4c2 0 2 2 2 3s0 3 2 3c-2 0-2 2-2 3s0 3-2 3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">2</span>
+        </div>
+        <h3>JSON5</h3>
+        <p class="card-en">json5</p>
+        <p class="card-desc">在 JSON5 与标准 JSON 之间双向转换，注释、尾逗号、单引号键都不再是障碍。</p>
+        <p class="card-api">qiumingdll_json5_decode(<span>…</span>)</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-keep" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M4.5 12h3M16.5 12h3M6.7 6.7l2.1 2.1M15.2 15.2l2.1 2.1M17.3 6.7l-2.1 2.1M8.8 15.2l-2.1 2.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="12" r="3.4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          </span>
+          <span class="card-count">3</span>
+        </div>
+        <h3>窗口保活</h3>
+        <p class="card-en">keeplive</p>
+        <p class="card-desc">阻止长时间无输入时系统判定窗口「未响应」——加载卡顿、断点调试、全屏等待都不再被白屏。</p>
+        <p class="card-api">qiumingdll_keeplive_init()</p>
+      </article>
+
+      <article class="card reveal">
+        <div class="card-top">
+          <span class="card-icon icon-core" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2.2" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 3v2.5M14 3v2.5M10 18.5V21M14 18.5V21M3 10h2.5M3 14h2.5M18.5 10H21M18.5 14H21" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          </span>
+          <span class="card-count">15</span>
+        </div>
+        <h3>核心与系统</h3>
+        <p class="card-en">system</p>
+        <p class="card-desc">初始化 / 释放、版本号、修复闪屏、禁用系统菜单、执行外部程序、仿旧版错误框。</p>
+        <p class="card-api">qiumingdll_get_version()</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section" id="design">
+    <div class="section-head reveal">
+      <p class="kicker">Design</p>
+      <h2>为「元游戏」而生</h2>
+      <p class="section-sub">这些能力通常需要自己写 C++、处理 Windows 消息循环、再手动绑回游戏。这里已经做完了。</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal">
+        <h3>单文件部署</h3>
+        <p>把 <code>qiumingdll.dll</code> 放到与 <code>data.win</code> 同级的目录，调用一次 <code>qiumingdll_init()</code> 即完成全部函数绑定。</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>多引擎可用</h3>
+        <p>GameMaker 直接走 GML 包装；仓库同时提供 Unity / Godot 的 C# 绑定，以及 Undertale Mod Tool 的导入脚本。</p>
+      </div>
+      <div class="pillar reveal">
+        <h3>优雅降级</h3>
+        <p>非 Windows 平台上，所有包装函数直接返回默认值，游戏照常运行；<code>init</code> 幂等，重复调用没有副作用。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="quickstart">
+    <div class="section-head reveal">
+      <p class="kicker">Quickstart</p>
+      <h2>三行起步</h2>
+      <p class="section-sub">下面是把主窗口一分为二、右侧面板弹入的完整流程。所有函数文档都有签名、返回值表与示例。</p>
+    </div>
+
+    <div class="quick-grid">
+      <ol class="steps reveal">
+        <li>
+          <span class="step-num">01</span>
+          <div>
+            <h3>放置 DLL</h3>
+            <p>按游戏位数选择 <code>x32</code> 或 <code>x64</code> 的 <code>qiumingdll.dll</code>，与 <code>data.win</code> 放在同一目录。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">02</span>
+          <div>
+            <h3>初始化</h3>
+            <p>在创建事件里调用 <code>qiumingdll_init()</code>；用到哪个模块，再调它的 <code>_init()</code>。</p>
+          </div>
+        </li>
+        <li>
+          <span class="step-num">03</span>
+          <div>
+            <h3>调用与清理</h3>
+            <p>直接调 API；房间结束或游戏退出时调用对应的 <code>_cleanup()</code> / <code>qiumingdll_free()</code> 释放资源。</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="code-panel reveal">
+        <div class="code-head">
+          <span class="code-file">obj_qiuming · Create</span>
+          <button class="copy" type="button" data-copy-target="quickCode">复制</button>
+        </div>
+<pre class="code" id="quickCode"><code><span class="c">// 绑定全部外部函数（仅 Windows 生效，可重复调用）</span>
+<span class="f">qiumingdll_init</span>();
+<span class="f">qiumingdll_fixflash</span>();   <span class="c">// 可选：消除窗口重绘闪烁</span>
+
+<span class="c">// 窗口分裂模块</span>
+<span class="k">if</span> (<span class="f">qiumingdll_winsplit_init</span>() == <span class="n">0</span>)
+{
+    <span class="k">var</span> _cw = <span class="f">window_get_width</span>();
+    <span class="k">var</span> _ch = <span class="f">window_get_height</span>();
+
+    <span class="c">// 源区域 → 屏幕坐标；返回 1~16 的 splitId</span>
+    <span class="k">var</span> _panel = <span class="f">qiumingdll_winsplit_create</span>(
+        _cw <span class="k">div</span> <span class="n">2</span>, <span class="n">0</span>, _cw <span class="k">div</span> <span class="n">2</span>, _ch,
+        <span class="n">80</span>, <span class="n">80</span>, _cw <span class="k">div</span> <span class="n">2</span>, _ch
+    );
+
+    <span class="f">qiumingdll_winsplit_set_easing_curve</span>(_panel, <span class="n">10</span>); <span class="c">// bounce-out</span>
+    <span class="f">qiumingdll_winsplit_set_position_animate</span>(_panel, <span class="n">40</span>, <span class="n">40</span>, <span class="n">600</span>, <span class="n">16</span>);
+}
+
+<span class="c">// 内联输入法：让候选框贴着输入光标</span>
+<span class="f">qiumingdll_ime_set_inline_position</span>(input_x, input_y + <span class="n">24</span>);
+
+<span class="c">// 麦克风音量（0 = 成功）</span>
+<span class="f">qiumingdll_volume_start</span>(<span class="n">48000</span>, <span class="n">10</span>);</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="license">
+    <div class="section-head reveal">
+      <p class="kicker">License</p>
+      <h2>授权条款</h2>
+      <p class="section-sub">免费使用，但不是无条件的。以下六条即全部条款，适用于任何形式的使用与分发。</p>
+    </div>
+
+    <div class="license-grid">
+      <article class="lic lic-allow reveal">
+        <span class="lic-tag">允许</span>
+        <h3>商业与非商业用途免费</h3>
+        <p>付费游戏、免费游戏、内部工具、教学项目、同人作品，均无需支付任何费用，也无需申请。</p>
+      </article>
+      <article class="lic lic-deny reveal">
+        <span class="lic-tag">禁止</span>
+        <h3>不得用于违反中国大陆法律的作品</h3>
+        <p>使用本套件的作品必须遵守中华人民共和国法律；违法内容不在授权范围内。</p>
+      </article>
+      <article class="lic lic-deny reveal">
+        <span class="lic-tag">禁止</span>
+        <h3>不得二次分发或贩卖</h3>
+        <p>不得转载、镜像、重新打包本套件，也不得以任何形式出售本套件本身或其修改版。</p>
+      </article>
+      <article class="lic lic-neutral reveal">
+        <span class="lic-tag">署名</span>
+        <h3>无需署名，但不得误导</h3>
+        <p>最终作品中不强制署名；如愿意署名，非常欢迎。但不得隐瞒或歪曲「本作品使用了 QiumingDLL」这一事实，也不得暗示本套件由你开发。</p>
+      </article>
+      <article class="lic lic-neutral reveal">
+        <span class="lic-tag">免责</span>
+        <h3>无 SLA，无背书</h3>
+        <p>按「现状」提供，不承诺可用性、兼容性或修复时限；作者不对你的作品作任何背书，你也不得声称获得了背书。</p>
+      </article>
+      <article class="lic lic-copy reveal">
+        <span class="lic-tag">版权</span>
+        <h3>保留所有权利</h3>
+        <p>秋冥散雨_Genouka 保留所有权利。上述许可是对本套件使用范围的限定授权，未授予的权利一律保留。</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section download" id="download">
+    <div class="download-card reveal">
+      <div class="download-copy">
+        <p class="kicker">Download</p>
+        <h2>拿走它，去做点奇怪的游戏</h2>
+        <p>网盘内含 <code>x32</code> / <code>x64</code> 的 DLL、GML 包装函数、使用教程、使用规约、Unity / Godot 绑定与 WebView2 加载器。</p>
+        <div class="download-actions">
+          <a class="btn btn-primary btn-lg" href="https://pan.quark.cn/s/0d6d1dbf3702" target="_blank" rel="noopener">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m0 0 4-4m-4 4L6 8M4 15.5h12" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            下载
+          </a>
+          <a class="btn btn-ghost btn-lg" href="https://genouka.github.io/qiumingdll-docs/#/README" target="_blank" rel="noopener">函数文档<span class="ext" aria-hidden="true">↗</span></a>
+        </div>
+        <p class="download-note">下载即表示你已阅读并同意上方的授权条款。</p>
+      </div>
+      <dl class="download-meta">
+        <div><dt>版本</dt><dd>v1.9</dd></div>
+        <div><dt>平台</dt><dd>Windows 10 / 11</dd></div>
+        <div><dt>架构</dt><dd>x86 · x64</dd></div>
+        <div><dt>引擎</dt><dd>GameMaker · Unity · Godot</dd></div>
+        <div><dt>价格</dt><dd>免费</dd></div>
+        <div><dt>语言</dt><dd>GML / C#</dd></div>
+      </dl>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-main">
+    <div class="footer-brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
+        <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-opacity=".35"/>
+        <path d="M22 10.5v8.2a4.3 4.3 0 0 1-4.3 4.3h-3.4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="22" cy="10" r="2.4" fill="currentColor"/>
+      </svg>
+      <div>
+        <strong>QiumingDLL</strong>
+        <p>元游戏开发辅助套件</p>
+      </div>
+    </div>
+    <nav class="footer-links" aria-label="页脚导航">
+      <a href="https://pan.quark.cn/s/0d6d1dbf3702" target="_blank" rel="noopener">下载 ↗</a>
+      <a href="https://genouka.github.io/qiumingdll-docs/#/README" target="_blank" rel="noopener">文档 ↗</a>
+      <a href="https://github.com/Genouka" target="_blank" rel="noopener">GitHub ↗</a>
+      <a href="#license">授权条款</a>
+    </nav>
+  </div>
+  <div class="footer-legal">
+    <p>© <span id="year">2026</span> 秋冥散雨_Genouka 保留所有权利。</p>
+    <p>QiumingDLL 与 GameMaker、Unity、Godot、Microsoft 均无隶属或背书关系。本页面仅用于分发与说明本套件。</p>
+  </div>
+</footer>
+
+<script src="assets/app.js" defer></script>
+</body>
+</html>
